@@ -1,0 +1,5 @@
+com\viridian\tddworkshop\sceneUtils\SceneUtilsTest.class
+com\viridian\tddworkshop\gameengine\GameEngineTest.class
+com\viridian\tddworkshop\testutils\TestUtils.class
+com\viridian\tddworkshop\ElementTraslationTest.class
+com\viridian\tddworkshop\ElementFactoryTest.class

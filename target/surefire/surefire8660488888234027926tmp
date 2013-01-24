@@ -1,0 +1,28 @@
+#surefire
+#Thu Jan 24 12:13:07 ART 2013
+testClassesDirectory=F\:\\ws_workshop\\tddtetris\\target\\test-classes
+classPathUrl.3=C\:\\Users\\tkehoe.CORPORATE\\.m2\\repository\\org\\hamcrest\\hamcrest-core\\1.3\\hamcrest-core-1.3.jar
+classPathUrl.2=C\:\\Users\\tkehoe.CORPORATE\\.m2\\repository\\junit\\junit\\4.11\\junit-4.11.jar
+useManifestOnlyJar=true
+classPathUrl.1=F\:\\ws_workshop\\tddtetris\\target\\classes
+reportsDirectory=F\:\\ws_workshop\\tddtetris\\target\\surefire-reports
+classPathUrl.0=F\:\\ws_workshop\\tddtetris\\target\\test-classes
+dirscanner.0=directoryScannerOptions
+providerConfiguration=org.apache.maven.surefire.junit4.JUnit4Provider
+testSuiteDefinitionTestSourceDirectory=F\:\\ws_workshop\\tddtetris\\src\\test\\java
+surefireClassPathUrl.1=C\:\\Users\\tkehoe.CORPORATE\\.m2\\repository\\org\\apache\\maven\\surefire\\surefire-api\\2.7.1\\surefire-api-2.7.1.jar
+surefireClassPathUrl.0=C\:\\Users\\tkehoe.CORPORATE\\.m2\\repository\\org\\apache\\maven\\surefire\\surefire-junit4\\2.7.1\\surefire-junit4-2.7.1.jar
+report.2=org.apache.maven.surefire.report.XMLReporter
+useSystemClassLoader=true
+report.1=org.apache.maven.surefire.report.BriefFileReporter
+report.0=org.apache.maven.surefire.report.ForkingConsoleReporter
+excludes0=**/*$*
+isTrimStackTrace=true
+dirscanner.0.params=F\:\\ws_workshop\\tddtetris\\target\\test-classes|[**/Test*.java, **/*Test.java, **/*TestCase.java]|[**/*$*]
+enableAssertions=true
+includes2=**/*TestCase.java
+failIfNoTests=false
+includes1=**/*Test.java
+dirscanner.0.types=java.io.File|java.util.ArrayList|java.util.ArrayList
+includes0=**/Test*.java
+childDelegation=false
