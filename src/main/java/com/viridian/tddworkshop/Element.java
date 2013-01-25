@@ -6,7 +6,9 @@ import java.util.Collection;
 import java.util.List;
 
 import com.viridian.tddworkshop.gameengine.StoppageListener;
+import com.viridian.tddworkshop.geometry.HeightProfile;
 import com.viridian.tddworkshop.geometry.HorizontalProjection;
+import com.viridian.tddworkshop.geometry.Segment;
 
 
 public class Element {
@@ -63,6 +65,7 @@ public class Element {
 		this.blockHeight =2;
 		
 		numberOfCorners = numberofCorners;
+		
 		this.topRight = grid.getStartPosition();
 		this.bottomLeft = new Position(this.topRight.x - blockWidth, this.topRight.y - blockHeight);
 		
@@ -70,7 +73,7 @@ public class Element {
 		
 		vertexes = Arrays.asList(this.bottomLeft, this.topRight);
 		
-		this.bottomShape = new HorizontalProjection(this.bottomLeft.x, this.topRight.x);
+		this.bottomShape = new HorizontalProjection(this.bottomLeft, this.topRight);
 		this.isMoving = false;
 		this.listeners = new ArrayList<StoppageListener>();
 	}
@@ -99,39 +102,51 @@ public class Element {
 	 * Moves the element in the grid. Does nothing if the element has reached the bottom of the grid.
 	 * 
 	 * @param where Will only consider "left" and "right" values.
+	 * @return true if it was able to move.
 	 */
-	public void move(String where) {
+	public boolean move(String where) {
 		
 		if (this.hasLanded()){
-			System.out.println("already landed");
-			return;
+			return false;
 		}
 		if (this.hasReachedBottom()) {
 			System.out.println("reached bottom");
 			for (StoppageListener listener : this.listeners){
 				listener.elementHasStoppedMoving(this);
 			}
-			return;
+			return false;
 		}
 		
 		if ("down".equals(where) ){
 			this.bottomLeft.y--;
 			this.topRight.y--;
-			
-			return;
-			
 		}
 		if ("left".equals(where) && notPressedAgainstLeftBorder()){
 			
 			this.bottomLeft.x --;
 			this.topRight.x --;
+			
+			this.bottomShape.moveLeft();
+		}
+		
+		if (! notPressedAgainstLeftBorder()){
+			return false;
 		}
 		
 		if ("right".equals(where) && notPressedAgainstRightBorder()){
 			
+			this.bottomShape.moveRight();
 			this.bottomLeft.x ++;
 			this.topRight.x ++;
 		}
+		
+		if (! notPressedAgainstRightBorder()){
+			return false;
+		}
+		
+		
+		
+		return true;
 	}
 	
 	public void idleMove(){
@@ -155,8 +170,21 @@ public class Element {
 		return this.topRight.x <= this.grid.rightSide();
 	}
 	
+	
 	private boolean hasReachedBottom() {
-		return this.bottomLeft.y <= this.grid.bottom();
+		//True si el objeto cayo arriba de algo.
+		for (Segment s:this.getHorizontalProjection().getShapeSegments()){
+			
+			HeightProfile hs = this.grid.heightAt(s);
+			
+			for (int h : hs){
+				
+				if (this.bottomLeft.getY() <= h){
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	public Position getBottomLeftCorner() {

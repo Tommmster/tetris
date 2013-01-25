@@ -35,7 +35,7 @@ public class TetrisGrid {
 		this.width = width;
 		this.height = height;
 		
-		this.profile = new HeightProfile(this.width, this.bottom());
+		this.profile = new HeightProfile(0, this.width, this.bottom());
 		
 		this.startingPosition = new Position(this.width /2, this.top());
 		this.landed = new ArrayList<Element>();
@@ -77,13 +77,12 @@ public class TetrisGrid {
 	public void land(Element element){
 		
 		this.landed.add(element);
+		
 		final int height = element.getHeight();
 		
 		for (Segment range : element.getHorizontalProjection().getShapeSegments()){
 			
-			for (int i = 0; i < range.to(); i ++ ){
-				final int xat = range.from() + i;
-				
+			for (int xat = range.from(); xat < range.to(); xat ++ ){
 				this.raiseFloorAt(xat, height);
 			}
 		}

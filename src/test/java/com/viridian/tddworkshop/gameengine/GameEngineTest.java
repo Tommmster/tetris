@@ -91,15 +91,13 @@ public class GameEngineTest {
 	@Test
 	public void elementsShouldBeAbleToLandOnTopOfEachOther(){
 		int expectedGridHeight = 0;
-		
-		
+				
 		Element landingElement = engine.getCurrentElement();
 		landElement(landingElement);
-		expectedGridHeight += landingElement.getTopRightCorner().getY();
 		
 		Element newElement = engine.getCurrentElement();
 		landElement(newElement);
-		expectedGridHeight += newElement.getTopRightCorner().getY();
+		expectedGridHeight = newElement.getTopRightCorner().getY();
 		
 
 		Assert.assertEquals(newElement.getHorizontalProjection().getShapeSegments(), landingElement.getHorizontalProjection().getShapeSegments());
@@ -113,6 +111,45 @@ public class GameEngineTest {
 			for (int h : heightAt){
 				Assert.assertEquals(expectedGridHeight, h);
 			}
+		}
+	}
+	
+	@Test
+	public void elementsShouldNotFallOnTopOfEachOtherIfTheyAreInDifferentX(){
+		Element e = this.engine.getCurrentElement();
+		
+		do{
+			System.out.println(e.getTopRightCorner().getX());
+		}while(e.move("left"));
+		
+		landElement(e);
+		
+		Element n = this.engine.getCurrentElement();
+		
+		landElement(n);
+		
+		
+		for (Segment se : e.getHorizontalProjection().getShapeSegments()){
+				
+			HeightProfile hp = this.engine.getGrid().heightAt(se);
+			
+			Assert.assertEquals(0, hp.from());
+			Assert.assertEquals(2, hp.to());
+			
+			
+			HeightProfile expected = new HeightProfile(0 ,2, 2);
+			Assert.assertEquals(expected, hp);
+			
+		}
+		
+		for (Segment se : n.getHorizontalProjection().getShapeSegments()){
+			HeightProfile hp = this.engine.getGrid().heightAt(se);
+			
+			Assert.assertEquals(3, hp.from());
+			Assert.assertEquals(5, hp.to());
+
+			HeightProfile expected = new HeightProfile(3 ,5, 2);
+			Assert.assertEquals(expected, hp);
 		}
 	}
 	
