@@ -16,6 +16,10 @@ import com.viridian.tddworkshop.sceneUtils.SceneTransformer;
 
 public class TetrisGridPanel extends JPanel {
 	
+	private static final int YOFFSET = 0;
+
+	private static final int XOFFSET = 0;
+
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -43,17 +47,19 @@ public class TetrisGridPanel extends JPanel {
 		this.coordinateTransformer = new SceneTransformer(grid.getWidth(), grid.getHeight(), this.width,this.height);
 		
 		this.setBorder(BorderFactory.createLineBorder(Color.red));
-		this.setBounds(100,100,this.width, this.height);
+		this.setBounds(XOFFSET,YOFFSET,this.width, this.height);
 		this.setPreferredSize(new Dimension(this.width, this.height));
 		this.setVisible(true);
 	}
 	
 	private int[] sceneXpoints(int x, int width){
+		//{xbl, xbr,xtr,xtl}
 		return new int[] {x, x + width, x + width, x };
 	}
 	
 	private int []sceneYpoints(int y, int height){
-		return new int[] {y , y , (y + height) , (y + height) };
+		//{ybl, ybr, ytr,ytl}
+		return new int[] {y , y , (y - height) , (y - height) };
 	}
 	
 	@Override
@@ -95,8 +101,6 @@ public class TetrisGridPanel extends JPanel {
 			
 			g.drawLine(x[0], y[0], x[1],y[1]);
 		}
-		
-		
 	}
 
 	private void drawElement(Graphics g, Color red, Element element) {
@@ -111,6 +115,9 @@ public class TetrisGridPanel extends JPanel {
 		g.setColor(red);
 		
 //		g.fillRoundRect(x, y, nPoints, nPoints, 3, 3)
-		g.fillPolygon(this.coordinateTransformer.xtransform(xPoints), this.coordinateTransformer.xtransform(yPoints), nPoints);
+		
+		int[] sceneXpoints = this.coordinateTransformer.xtransform(xPoints);
+		int[] sceneYpoints = this.coordinateTransformer.xtransform(yPoints);
+		g.fillPolygon(sceneXpoints, sceneYpoints, nPoints);
 	}
 }

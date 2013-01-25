@@ -71,6 +71,7 @@ public class Element {
 		
 		this.listeners = new ArrayList<StoppageListener>();
 	}
+
 	
 	public void registerListener(StoppageListener listener){
 		this.listeners.add(listener);

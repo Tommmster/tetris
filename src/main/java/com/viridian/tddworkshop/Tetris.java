@@ -27,8 +27,7 @@ public class Tetris extends JFrame{
 		
 		final TetrisEngine gameEngine = new TetrisEngine();
 		JFrame frame = new JFrame ("TDD Tetris");
-		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		frame.setSize(1280,768);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setPreferredSize(new Dimension(1280, 1000));
 		
 		

@@ -31,6 +31,8 @@ public class TetrisGrid {
 		this.height = height;
 		
 		this.startingPosition = new Position(this.width /2, this.top());
+//		this.startingPosition = new Position(0, 0);
+		System.out.println("Starting position at " + this.startingPosition);
 		this.landed = new ArrayList<Element>();
 	}
 	
@@ -64,7 +66,7 @@ public class TetrisGrid {
 	}
 	
 	public int rightSide(){
-		return this.width ;
+		return this.width -1;
 	}
 	
 	public void land(Element element){

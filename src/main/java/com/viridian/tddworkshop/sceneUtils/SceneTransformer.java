@@ -12,6 +12,15 @@ public class SceneTransformer {
 		VERTICAL_TRANSFORMATION_FACTOR = sceneHeight  / worldHeight;
 	}
 	
+	public int[] traslate (int[] points, int offset){
+		
+		int [] traslated = new int[points.length];
+		
+		for (int i=0; i< points.length; i++){
+			traslated [i] = points[i] + offset;
+		}
+		return traslated;
+	}
 	public int[] xtransform(int[] xpoints ){
 		return transform(xpoints, HORIZONTAL_TRANSFORMATION_FACTOR);
 	}
