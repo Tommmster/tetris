@@ -107,15 +107,12 @@ public class TetrisGridPanel extends JPanel {
 		//Works only for squares
 		Position bottomLeft = element.getBottomLeftCorner();
 		int[] xPoints = this.sceneXpoints(bottomLeft.getX(), element.getWidth());
-		int[] yPoints = this.sceneYpoints(bottomLeft.getY(), element.getHeight());
+		int[] yPoints = this.sceneYpoints(20-bottomLeft.getY(), element.getHeight());
 		int nPoints = 4;
 		
 		
 		
 		g.setColor(red);
-		
-//		g.fillRoundRect(x, y, nPoints, nPoints, 3, 3)
-		
 		int[] sceneXpoints = this.coordinateTransformer.xtransform(xPoints);
 		int[] sceneYpoints = this.coordinateTransformer.xtransform(yPoints);
 		g.fillPolygon(sceneXpoints, sceneYpoints, nPoints);

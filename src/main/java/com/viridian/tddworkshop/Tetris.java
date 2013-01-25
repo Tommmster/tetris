@@ -60,7 +60,7 @@ public class Tetris extends JFrame{
 		
 		
 		repaintTimer.start();
-//		idleTimer.start();
+		//idleTimer.start();
 	}
 	
 	public void stop(){

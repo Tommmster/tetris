@@ -20,7 +20,7 @@ public class TestUtils {
 	public static void assertElementHasMovedStraightDown(Position[] oldCorners, Position[] corners, int numberOfCorners){
 		for (int i=0; i < numberOfCorners; i++){
 			Assert.assertEquals(oldCorners[i].getX(), corners[i].getX());
-			Assert.assertEquals(oldCorners[i].getY() +1 , corners[i].getY());
+			Assert.assertEquals(oldCorners[i].getY() - 1 , corners[i].getY());
 		}
 	}
 	public static void assertElementHasMovedStraightDownInAHurry(Position[] oldCorners, Element element){

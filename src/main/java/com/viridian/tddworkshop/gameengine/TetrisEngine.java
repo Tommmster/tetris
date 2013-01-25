@@ -70,8 +70,6 @@ public class TetrisEngine implements GameEngine, StoppageListener {
 	}
 	
 	public void onIdle() {
-		System.out.println("idle down from "+  this.currentElement.getBottomLeftCorner());
-		System.out.println("Grid bottom is  " + grid.bottom());
 		this.currentElement.idleMove();
 	}
 

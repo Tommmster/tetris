@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.List;
 
 import com.viridian.tddworkshop.gameengine.StoppageListener;
+import com.viridian.tddworkshop.geometry.HorizontalProjection;
 
 
 public class Element {
@@ -40,6 +41,8 @@ public class Element {
 	
 	private  List<Position> vertexes;
 	
+	private HorizontalProjection bottomShape;
+	
 	private final int numberOfCorners;
 	
 	private TetrisGrid grid;
@@ -57,21 +60,24 @@ public class Element {
 	 */
 	public Element(TetrisGrid grid, int numberofCorners) {
 		this.blockWidth = 2;
-		this.blockHeight =2 ;
+		this.blockHeight =2;
 		
 		numberOfCorners = numberofCorners;
 		this.topRight = grid.getStartPosition();
-		this.bottomLeft = new Position(this.topRight.x - blockWidth, this.topRight.y + blockHeight);
+		this.bottomLeft = new Position(this.topRight.x - blockWidth, this.topRight.y - blockHeight);
 		
 		this.grid = grid;
 		
 		vertexes = Arrays.asList(this.bottomLeft, this.topRight);
 		
+		this.bottomShape = new HorizontalProjection(this.bottomLeft.x, this.topRight.x);
 		this.isMoving = false;
-		
 		this.listeners = new ArrayList<StoppageListener>();
 	}
 
+	public HorizontalProjection getHorizontalProjection(){
+		return this.bottomShape;
+	}
 	
 	public void registerListener(StoppageListener listener){
 		this.listeners.add(listener);
@@ -109,8 +115,8 @@ public class Element {
 		}
 		
 		if ("down".equals(where) ){
-			this.bottomLeft.y+=1;
-			this.topRight.y+=1;
+			this.bottomLeft.y--;
+			this.topRight.y--;
 			
 			return;
 			
@@ -137,8 +143,8 @@ public class Element {
 			return;
 		}
 		
-		this.bottomLeft.y++;
-		this.topRight.y++;
+		this.bottomLeft.y--;
+		this.topRight.y--;
 	}
 	
 	private boolean notPressedAgainstLeftBorder() {
@@ -150,7 +156,7 @@ public class Element {
 	}
 	
 	private boolean hasReachedBottom() {
-		return this.bottomLeft.y >= this.grid.bottom();
+		return this.bottomLeft.y <= this.grid.bottom();
 	}
 
 	public Position getBottomLeftCorner() {

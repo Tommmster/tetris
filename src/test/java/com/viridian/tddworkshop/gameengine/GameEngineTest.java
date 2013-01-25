@@ -6,6 +6,9 @@ import org.junit.Test;
 
 import com.viridian.tddworkshop.Element;
 import com.viridian.tddworkshop.Position;
+import com.viridian.tddworkshop.TetrisGrid;
+import com.viridian.tddworkshop.geometry.HeightProfile;
+import com.viridian.tddworkshop.geometry.Segment;
 import com.viridian.tddworkshop.testutils.TestUtils;
 
 public class GameEngineTest {
@@ -44,7 +47,6 @@ public class GameEngineTest {
 		engine.executeCommand(TetrisEngine.BOOST_DOWN);
 		
 		TestUtils.assertElementHasMovedStraightDown(oldPosition, engine.getCurrentElement());
-		
 	}
 	
 	@Test
@@ -54,7 +56,7 @@ public class GameEngineTest {
 		
 		this.landElement(landingElement);
 		
-		Assert.assertEquals(19, landingElement.getBottomLeftCorner().getY());
+		Assert.assertEquals(engine.getGrid().bottom(), landingElement.getBottomLeftCorner().getY());
 	}
 	
 	@Test
@@ -70,13 +72,50 @@ public class GameEngineTest {
 		Assert.assertFalse(movingElement.hasLanded());
 	}
 	
+	@Test
+	public void whenAnObjectLandsOnTheGridThenTheBottomShouldBeRaised(){
+		
+		Element landingElement = engine.getCurrentElement();
+		final int initialBottom = engine.getGrid().bottom();
+		Iterable<Segment> landingAt = landingElement.getHorizontalProjection().getShapeSegments();
+		
+		landElement(landingElement);
+		
+		HeightProfile heights = engine.getGrid().heightAt(landingAt.iterator().next());
+		
+		for (Integer h : heights){
+			Assert.assertTrue(h > initialBottom);
+		}
+	}
 	
 	@Test
-	public void whenARowIsFormedItShouldBeDeleted(){
+	public void elementsShouldBeAbleToLandOnTopOfEachOther(){
+		int expectedGridHeight = 0;
 		
 		
-	}
+		Element landingElement = engine.getCurrentElement();
+		landElement(landingElement);
+		expectedGridHeight += landingElement.getTopRightCorner().getY();
+		
+		Element newElement = engine.getCurrentElement();
+		landElement(newElement);
+		expectedGridHeight += newElement.getTopRightCorner().getY();
+		
 
+		Assert.assertEquals(newElement.getHorizontalProjection().getShapeSegments(), landingElement.getHorizontalProjection().getShapeSegments());
+		
+		TetrisGrid grid = this.engine.getGrid();
+		
+		for (Segment segment: newElement.getHorizontalProjection().getShapeSegments()){
+			
+			HeightProfile heightAt = grid.heightAt(segment);
+			
+			for (int h : heightAt){
+				Assert.assertEquals(expectedGridHeight, h);
+			}
+		}
+	}
+	
 	private void landElement(Element landingElement) {
 		do {
 			engine.onIdle();

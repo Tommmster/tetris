@@ -3,6 +3,9 @@ package com.viridian.tddworkshop;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import com.viridian.tddworkshop.geometry.HeightProfile;
+import com.viridian.tddworkshop.geometry.Segment;
+
 public class TetrisGrid {
 
 	/**
@@ -26,13 +29,15 @@ public class TetrisGrid {
 	private final Position startingPosition;
 	
 	
+	private final HeightProfile profile;
+	
 	public TetrisGrid(int width, int height){
 		this.width = width;
 		this.height = height;
 		
+		this.profile = new HeightProfile(this.width, this.bottom());
+		
 		this.startingPosition = new Position(this.width /2, this.top());
-//		this.startingPosition = new Position(0, 0);
-		System.out.println("Starting position at " + this.startingPosition);
 		this.landed = new ArrayList<Element>();
 	}
 	
@@ -54,7 +59,7 @@ public class TetrisGrid {
 	
 	
 	public int top() {
-		return 0;
+		return height;
 	}
 	
 	public int leftSide(){
@@ -62,7 +67,7 @@ public class TetrisGrid {
 	}
 	
 	public int bottom() {
-		return this.height-1;
+		return 0;
 	}
 	
 	public int rightSide(){
@@ -70,6 +75,33 @@ public class TetrisGrid {
 	}
 	
 	public void land(Element element){
+		
 		this.landed.add(element);
+		final int height = element.getHeight();
+		
+		for (Segment range : element.getHorizontalProjection().getShapeSegments()){
+			
+			for (int i = 0; i < range.to(); i ++ ){
+				final int xat = range.from() + i;
+				
+				this.raiseFloorAt(xat, height);
+			}
+		}
+		
+		
+	}
+	
+
+	private void raiseFloorAt(int xat, int height) {
+		this.profile.raiseAt(xat, height);
+	}
+
+	/**
+	 * 
+	 * @param whatPoints an array containing a [from-to] range.
+	 * @return an array of (to-from) elements. Each element will represent the height at that point
+	 */
+	public HeightProfile heightAt(Segment whatPoints) {
+		return this.profile.heightRange(whatPoints.from(), whatPoints.to());
 	}
 }
