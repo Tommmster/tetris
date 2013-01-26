@@ -3,21 +3,19 @@ package com.viridian.tddworkshop;
 public class ElementFactory {
 
 	
-	public Element createSquare (TetrisGrid grid){
-		
-		Element element = new Element(grid, 2);
-		return element;
+	public TetrisBlock createSquare (Playground2D grid){
+		return new SquareBlock(grid, 2);
 	}
 	
-	public Element createStraight(){
+	public TetrisBlock createStraight(Playground2D grid){
+		return new StickBlock(grid);
+	}
+	
+	public SquareBlock createL(){
 		return null;
 	}
 	
-	public Element createL(){
-		return null;
-	}
-	
-	public Element createS(){
+	public SquareBlock createS(){
 		return null;
 	}
 	

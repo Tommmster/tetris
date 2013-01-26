@@ -3,14 +3,14 @@ package com.viridian.tddworkshop.testutils;
 import org.junit.Assert;
 import org.junit.Ignore;
 
-import com.viridian.tddworkshop.Element;
+import com.viridian.tddworkshop.SquareBlock;
 import com.viridian.tddworkshop.Position;
 
 @Ignore
 public class TestUtils {
 
 
-	public static void assertElementHasStoppedMoving(Position[] initial, Element element) {
+	public static void assertElementHasStoppedMoving(Position[] initial, SquareBlock element) {
 
 		for(int i=0; i< element.getNumberOfCorners(); i++){
 			Assert.assertEquals(initial[i], element.getCorners()[i]);
@@ -23,7 +23,7 @@ public class TestUtils {
 			Assert.assertEquals(oldCorners[i].getY() - 1 , corners[i].getY());
 		}
 	}
-	public static void assertElementHasMovedStraightDownInAHurry(Position[] oldCorners, Element element){
+	public static void assertElementHasMovedStraightDownInAHurry(Position[] oldCorners, SquareBlock element){
 		int numberOfCorners = element.getNumberOfCorners();
 		
 		for (int i=0; i < numberOfCorners; i++){
@@ -31,7 +31,7 @@ public class TestUtils {
 			Assert.assertEquals(oldCorners[i].getY() +2 , element.getCorners()[i].getY()); //TODO Magic number
 		}
 	}
-	public static void assertElementHasMovedStraightDown(Position[] oldPosition, Element element){
+	public static void assertElementHasMovedStraightDown(Position[] oldPosition, SquareBlock element){
 		TestUtils.assertElementHasMovedStraightDown(oldPosition, element.getCorners(), element.getNumberOfCorners());
 	}
 
@@ -42,10 +42,10 @@ public class TestUtils {
 		}
 	}
 	
-	public static void assertElementHasMovedLeftAndDown(Position[] oldPosition, Element element){
+	public static void assertElementHasMovedLeftAndDown(Position[] oldPosition, SquareBlock element){
 		TestUtils.assertElementHasMovedLeft(oldPosition, element.getCorners(), element.getNumberOfCorners());
 	}
-	public static void assertElementHasMovedRightAndDown(Position[] oldPosition, Element element){
+	public static void assertElementHasMovedRightAndDown(Position[] oldPosition, SquareBlock element){
 		TestUtils.assertElementHasMovedRight(oldPosition, element.getCorners(), element.getNumberOfCorners());
 	}
 

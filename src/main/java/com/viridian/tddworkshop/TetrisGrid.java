@@ -6,12 +6,12 @@ import java.util.Collection;
 import com.viridian.tddworkshop.geometry.HeightProfile;
 import com.viridian.tddworkshop.geometry.Segment;
 
-public class TetrisGrid {
+public class TetrisGrid implements Playground2D {
 
 	/**
 	 * Elements that have already landed.
 	 */
-	private Collection<Element> landed;
+	private Collection<TetrisBlock> landed;
 	
 	/**
 	 * Grid width (logical units)
@@ -37,11 +37,11 @@ public class TetrisGrid {
 		
 		this.profile = new HeightProfile(0, this.width, this.bottom());
 		
-		this.startingPosition = new Position(this.width /2, this.top());
-		this.landed = new ArrayList<Element>();
+		this.startingPosition = new Position(this.width/2, this.top());
+		this.landed = new ArrayList<TetrisBlock>();
 	}
 	
-	public Iterable<Element> getLandedElements(){
+	public Iterable<TetrisBlock> getLandedElements(){
 		return this.landed;
 	}
 	
@@ -74,18 +74,10 @@ public class TetrisGrid {
 		return this.width -1;
 	}
 	
-	public void land(Element element){
+	public void land(TetrisBlock element){
 		
 		this.landed.add(element);
 		
-		final int height = element.getHeight();
-		
-		for (Segment range : element.getHorizontalProjection().getShapeSegments()){
-			
-			for (int xat = range.from(); xat < range.to(); xat ++ ){
-				this.raiseFloorAt(xat, height);
-			}
-		}
 		
 		
 	}

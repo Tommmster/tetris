@@ -1,7 +1,8 @@
 package com.viridian.tddworkshop.gameengine;
 
-import com.viridian.tddworkshop.Element;
 import com.viridian.tddworkshop.ElementFactory;
+import com.viridian.tddworkshop.Playground2D;
+import com.viridian.tddworkshop.TetrisBlock;
 import com.viridian.tddworkshop.TetrisGrid;
 
 public class TetrisEngine implements GameEngine, StoppageListener {
@@ -15,32 +16,32 @@ public class TetrisEngine implements GameEngine, StoppageListener {
 	/**
 	 * Where are we playing.
 	 */
-	private TetrisGrid grid;
+	private Playground2D grid;
 	
 	/**
 	 * With which element.
 	 */
-	private Element currentElement;
+	private TetrisBlock currentElement;
 
 	public TetrisEngine(){
 		this.grid = new TetrisGrid(10, 20);
 		this.insertNewMovingElement();
 	}
 	
-	public TetrisGrid getGrid() {
+	public Playground2D getGrid() {
 		return this.grid;
 	}
 
-	public Element getCurrentElement() {
+	public TetrisBlock getCurrentElement() {
 		return this.currentElement;
 	}
 	
-	private void setCurrentElement(Element e){
+	private void setCurrentElement(TetrisBlock e){
 		this.currentElement = e;
 	}
 	
 	
-	public void elementHasStoppedMoving(Element element) {
+	public void elementHasStoppedMoving(TetrisBlock element) {
 		element.stop();
 		this.grid.land(element);
 		
@@ -48,7 +49,7 @@ public class TetrisEngine implements GameEngine, StoppageListener {
 	}
 
 	private void insertNewMovingElement() {
-		Element newone = new ElementFactory().createSquare(this.grid);
+		TetrisBlock newone = new ElementFactory().createSquare(this.grid);
 		newone.start();
 		newone.registerListener(this);
 		this.setCurrentElement(newone);
@@ -70,7 +71,7 @@ public class TetrisEngine implements GameEngine, StoppageListener {
 	}
 	
 	public void onIdle() {
-		this.currentElement.idleMove();
+		this.currentElement.fall();
 	}
 
 	

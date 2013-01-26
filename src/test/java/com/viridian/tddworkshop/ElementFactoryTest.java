@@ -14,7 +14,7 @@ public class ElementFactoryTest {
 		ElementFactory factory = new ElementFactory();
 		TetrisGrid grid = new TetrisGrid(10, 10);
 		
-		Element square = factory.createSquare(grid);
+		SquareBlock square = factory.createSquare(grid);
 		
 		Assert.assertEquals(4, square.getNumberOfCorners());
 		Assert.assertEquals(4, square.getNumberOfCorners());

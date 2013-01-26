@@ -10,7 +10,7 @@ public class Position {
 		this.y = 0;
 	}
 	
-	protected Position(int x, int y){
+	public Position(int x, int y){
 		this.x = x;
 		this.y = y;
 	}

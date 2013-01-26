@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.viridian.tddworkshop.Element;
+import com.viridian.tddworkshop.SquareBlock;
 import com.viridian.tddworkshop.Position;
 import com.viridian.tddworkshop.TetrisGrid;
 import com.viridian.tddworkshop.geometry.HeightProfile;
@@ -52,7 +52,7 @@ public class GameEngineTest {
 	@Test
 	public void elementShouldStopAtTheBottomOfTheGrid(){
 		
-		Element landingElement = engine.getCurrentElement();
+		SquareBlock landingElement = engine.getCurrentElement();
 		
 		this.landElement(landingElement);
 		
@@ -62,11 +62,11 @@ public class GameEngineTest {
 	@Test
 	public void whenAnElementLandsANewOneShouldAppear(){
 		
-		Element landingElement = engine.getCurrentElement();
+		SquareBlock landingElement = engine.getCurrentElement();
 		
 		landElement(landingElement);
 		
-		Element movingElement = engine.getCurrentElement();
+		SquareBlock movingElement = engine.getCurrentElement();
 		
 		Assert.assertNotEquals(landingElement, movingElement);
 		Assert.assertFalse(movingElement.hasLanded());
@@ -75,7 +75,7 @@ public class GameEngineTest {
 	@Test
 	public void whenAnObjectLandsOnTheGridThenTheBottomShouldBeRaised(){
 		
-		Element landingElement = engine.getCurrentElement();
+		SquareBlock landingElement = engine.getCurrentElement();
 		final int initialBottom = engine.getGrid().bottom();
 		Iterable<Segment> landingAt = landingElement.getHorizontalProjection().getShapeSegments();
 		
@@ -92,10 +92,10 @@ public class GameEngineTest {
 	public void elementsShouldBeAbleToLandOnTopOfEachOther(){
 		int expectedGridHeight = 0;
 				
-		Element landingElement = engine.getCurrentElement();
+		SquareBlock landingElement = engine.getCurrentElement();
 		landElement(landingElement);
 		
-		Element newElement = engine.getCurrentElement();
+		SquareBlock newElement = engine.getCurrentElement();
 		landElement(newElement);
 		expectedGridHeight = newElement.getTopRightCorner().getY();
 		
@@ -116,33 +116,28 @@ public class GameEngineTest {
 	
 	@Test
 	public void elementsShouldNotFallOnTopOfEachOtherIfTheyAreInDifferentX(){
-		Element e = this.engine.getCurrentElement();
+		SquareBlock leftSideElement = this.engine.getCurrentElement();
 		
-		do{
-			System.out.println(e.getTopRightCorner().getX());
-		}while(e.move("left"));
+		do{}while(leftSideElement.move("left"));
+		landElement(leftSideElement);
 		
-		landElement(e);
-		
-		Element n = this.engine.getCurrentElement();
-		
-		landElement(n);
+		SquareBlock centerElement = this.engine.getCurrentElement();
+		landElement(centerElement);
 		
 		
-		for (Segment se : e.getHorizontalProjection().getShapeSegments()){
+		for (Segment se : leftSideElement.getHorizontalProjection().getShapeSegments()){
 				
 			HeightProfile hp = this.engine.getGrid().heightAt(se);
 			
 			Assert.assertEquals(0, hp.from());
 			Assert.assertEquals(2, hp.to());
 			
-			
 			HeightProfile expected = new HeightProfile(0 ,2, 2);
 			Assert.assertEquals(expected, hp);
 			
 		}
 		
-		for (Segment se : n.getHorizontalProjection().getShapeSegments()){
+		for (Segment se : centerElement.getHorizontalProjection().getShapeSegments()){
 			HeightProfile hp = this.engine.getGrid().heightAt(se);
 			
 			Assert.assertEquals(3, hp.from());
@@ -153,7 +148,13 @@ public class GameEngineTest {
 		}
 	}
 	
-	private void landElement(Element landingElement) {
+	
+	
+	public void whenARowIsFilledThenTheRowShouldBeCleared(){
+		
+	}
+	
+	private void landElement(SquareBlock landingElement) {
 		do {
 			engine.onIdle();
 		}while (!landingElement.hasLanded());

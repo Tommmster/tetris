@@ -13,6 +13,7 @@ import com.viridian.tddworkshop.gameengine.TetrisEngine;
 public class TetrisKeyboardListener implements KeyListener {
 
 	GameEngine tetrisEngine;
+	
 	private final Tetris tetris;
 	
 	public TetrisKeyboardListener( GameEngine engine, Tetris tetris){
@@ -49,6 +50,5 @@ public class TetrisKeyboardListener implements KeyListener {
 		if (e.getKeyCode() == KeyEvent.VK_DOWN){
 			 System.out.println("Back to normal speed");
 		}
-
 	}
 }

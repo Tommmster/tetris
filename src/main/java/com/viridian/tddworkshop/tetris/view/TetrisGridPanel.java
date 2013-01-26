@@ -7,8 +7,9 @@ import java.awt.Graphics;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
-import com.viridian.tddworkshop.Element;
 import com.viridian.tddworkshop.Position;
+import com.viridian.tddworkshop.SquareBlock;
+import com.viridian.tddworkshop.TetrisBlock;
 import com.viridian.tddworkshop.TetrisGrid;
 import com.viridian.tddworkshop.gameengine.GameEngine;
 import com.viridian.tddworkshop.gameengine.TetrisEngine;
@@ -35,9 +36,12 @@ public class TetrisGridPanel extends JPanel {
 	private final TetrisEngine gameEngine;
 	
 	private SceneTransformer coordinateTransformer;
+
+	private final TetrisGrid tetrisGrid;
 	
 	public TetrisGridPanel (TetrisGrid grid, GameEngine gameEngine){
 		
+		this.tetrisGrid = grid;
 		this.gameEngine = (TetrisEngine) gameEngine;
 		
 		this.width = 400;
@@ -51,30 +55,21 @@ public class TetrisGridPanel extends JPanel {
 		this.setPreferredSize(new Dimension(this.width, this.height));
 		this.setVisible(true);
 	}
-	
-	private int[] sceneXpoints(int x, int width){
-		//{xbl, xbr,xtr,xtl}
-		return new int[] {x, x + width, x + width, x };
-	}
-	
-	private int []sceneYpoints(int y, int height){
-		//{ybl, ybr, ytr,ytl}
-		return new int[] {y , y , (y - height) , (y - height) };
-	}
+
 	
 	@Override
 	public void paint(Graphics g) {
 		super.paint(g);
 		
-		drawGrid(g);
+		//drawGrid(g);
 		Color red = Color.red;
 		Color black = Color.BLACK;
 		
 		
-		drawElement(g, red, gameEngine.getCurrentElement());
+		drawElement(g, red, gameEngine.getCurrentElement(), Color.BLACK);
 		
-		for (Element landedElement : gameEngine.getGrid().getLandedElements()){
-			drawElement(g,black, landedElement);
+		for (SquareBlock landedElement : gameEngine.getGrid().getLandedElements()){
+			drawElement(g,black, landedElement, Color.BLACK);
 		}
 	}
 
@@ -103,18 +98,17 @@ public class TetrisGridPanel extends JPanel {
 		}
 	}
 
-	private void drawElement(Graphics g, Color red, Element element) {
-		//Works only for squares
-		Position bottomLeft = element.getBottomLeftCorner();
-		int[] xPoints = this.sceneXpoints(bottomLeft.getX(), element.getWidth());
-		int[] yPoints = this.sceneYpoints(20-bottomLeft.getY(), element.getHeight());
-		int nPoints = 4;
-		
-		
-		
-		g.setColor(red);
-		int[] sceneXpoints = this.coordinateTransformer.xtransform(xPoints);
-		int[] sceneYpoints = this.coordinateTransformer.xtransform(yPoints);
-		g.fillPolygon(sceneXpoints, sceneYpoints, nPoints);
+	private void drawElement(Graphics g, Color fillColor, TetrisBlock element, Color borderColor) {
+	
+		for (Position cellVertex : element.deconstruct()){
+			final Position worldVertex = this.coordinateTransformer.traslate(cellVertex);
+			int s[] = this.coordinateTransformer.scaleHorizontalLine(0, 1);
+			int one = s[1];
+
+			g.setColor(fillColor);
+			g.fillRoundRect(worldVertex.getX(),worldVertex.getY(), one, one, 10, 10);
+			g.setColor(borderColor);
+			g.drawRoundRect(worldVertex.getX(), worldVertex.getY(),one, one, 10, 10);
+		}
 	}
 }

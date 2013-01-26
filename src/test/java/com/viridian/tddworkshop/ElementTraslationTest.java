@@ -1,7 +1,9 @@
 package com.viridian.tddworkshop;
 
-import org.junit.Assert;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -22,7 +24,7 @@ public class ElementTraslationTest {
 
 		Tetris tetrisGame = new Tetris();
 		
-		tetrisGame.start();
+		tetrisGame.start(null);
 		
 		synchronized (this) {
 			this.wait();
@@ -31,7 +33,7 @@ public class ElementTraslationTest {
 	
 	@Test
 	public void elementShouldMoveDownWhileActive(){
-		Element element = new Element(this.REALLY_LARGE_GRID, 2);
+		SquareBlock element = new SquareBlock(this.REALLY_LARGE_GRID, 2);
 		element.start();
 		Position [] initials = element.getCorners();
 		
@@ -43,7 +45,7 @@ public class ElementTraslationTest {
 	@Test
 	public void elementShouldStopMovingWhenItReachesBottomOfTheGrid() {
 		TetrisGrid grid = new TetrisGrid(10,3);
-		Element element = new Element(grid, 2);
+		SquareBlock element = new SquareBlock(grid, 2);
 		element.start();
 		Position[] initials = element.getCorners();
 		
@@ -61,7 +63,7 @@ public class ElementTraslationTest {
 	public void elementShouldMoveSidewaysWhenToldTo() {
 		
 		TetrisGrid grid = new TetrisGrid(10,10);
-		Element element = new Element(grid, 2);
+		SquareBlock element = new SquareBlock(grid, 2);
 		element.start();
 		Position[] initials = element.getCorners();
 		
@@ -79,14 +81,14 @@ public class ElementTraslationTest {
 	public void elementShouldNotEscapeTheGridThroughTheSides(){
 		
 		TetrisGrid grid = new TetrisGrid(10,10);
-		Element leftSideElement = this.getAnElementPressedAgainstTheSideOfThisGrid("leftSide", grid);
+		SquareBlock leftSideElement = this.getAnElementPressedAgainstTheSideOfThisGrid("leftSide", grid);
 		
 		Position[] initials = leftSideElement.getCorners();
 		leftSideElement.move("left");
 		TestUtils.assertElementHasStoppedMoving(initials, leftSideElement);
 		
 		
-		Element rightSideElement = this.getAnElementPressedAgainstTheSideOfThisGrid("rightSide", grid);
+		SquareBlock rightSideElement = this.getAnElementPressedAgainstTheSideOfThisGrid("rightSide", grid);
 		initials = rightSideElement.getCorners();
 		rightSideElement.move("right");
 		TestUtils.assertElementHasStoppedMoving(initials, rightSideElement);
@@ -95,18 +97,29 @@ public class ElementTraslationTest {
 	@Test
 	public void elementShouldBePlacedAtTheTopOfTheGridInTheMiddle(){
 		TetrisGrid grid = new TetrisGrid(10,10);
-		
-		Element anElement = new Element(grid, 2);
+		SquareBlock anElement = new SquareBlock(grid, 2);
 		
 		Assert.assertEquals(anElement.getStartingPoint(), new Position(grid.getWidth() /2, grid.top()));
+	}
+	
+	@Test
+	public void deconstruct(){
+		TetrisGrid grid = new TetrisGrid(10,10);
+		SquareBlock anElement = new SquareBlock(grid, 2);
+		
+		List<Position> positions = new ArrayList<Position>(4);
+		
+		for (Position p : anElement.deconstruct()){
+			System.out.println(p);
+		}
 	}
 	/**
 	 * @param whichSide will ignore values different than "leftSide" or "rightSide". Will return null if this advice is ignored.
 	 * @param whichGrid
 	 * @return
 	 */
-	private Element getAnElementPressedAgainstTheSideOfThisGrid(String whichSide, TetrisGrid whichGrid){
-		Element element = new Element(whichGrid, 2);
+	private SquareBlock getAnElementPressedAgainstTheSideOfThisGrid(String whichSide, TetrisGrid whichGrid){
+		SquareBlock element = new SquareBlock(whichGrid, 2);
 		if ("leftSide".equals(whichSide)){
 			
 			final Position leftSide = new Position(whichGrid.leftSide(),whichGrid.top());
@@ -125,27 +138,4 @@ public class ElementTraslationTest {
 	}
 
 	
-	@Deprecated
-	private void assertPositionHasStoppedMoving(Position[] initial, Element element) {
-		TestUtils.assertElementHasStoppedMoving(initial, element);
-	}
-
-	@Deprecated
-	private void assertElementHasMovedStraightDown(Position[] oldCorners, Position[] corners, int numberOfCorners){
-		TestUtils.assertElementHasMovedStraightDown(oldCorners, corners, numberOfCorners);
-
-	}
-	
-	
-	@Deprecated
-	private void assertElementHasMovedLeftAndDown(Position[] oldCorners, Position[] corners, int numberOfCorners){
-		TestUtils.assertElementHasMovedLeft(oldCorners, corners, numberOfCorners);
-
-	}
-	
-	@Deprecated
-	private void assertElementHasMovedRightAndDown(Position[] initials,Position[] corners, int numberOfCorners) {
-		TestUtils.assertElementHasMovedRight(initials, corners, numberOfCorners);
-
-	}
 }

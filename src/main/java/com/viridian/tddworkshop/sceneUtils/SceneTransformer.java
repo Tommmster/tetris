@@ -1,5 +1,7 @@
 package com.viridian.tddworkshop.sceneUtils;
 
+import com.viridian.tddworkshop.Position;
+
 public class SceneTransformer {
 
 	
@@ -10,6 +12,12 @@ public class SceneTransformer {
 		
 		HORIZONTAL_TRANSFORMATION_FACTOR = sceneWidth  / worldWidth;
 		VERTICAL_TRANSFORMATION_FACTOR = sceneHeight  / worldHeight;
+	}
+	
+	public Position traslate(Position vertex){
+		
+		return new Position (vertex.getX() * HORIZONTAL_TRANSFORMATION_FACTOR,
+				(20 - vertex.getY()) * VERTICAL_TRANSFORMATION_FACTOR);
 	}
 	
 	public int[] traslate (int[] points, int offset){
@@ -26,7 +34,7 @@ public class SceneTransformer {
 	}
 	
 	public int[] scaleHorizontalLine(int from, int to){
-		return new int[]{to * HORIZONTAL_TRANSFORMATION_FACTOR, from * HORIZONTAL_TRANSFORMATION_FACTOR };
+		return new int[]{from * HORIZONTAL_TRANSFORMATION_FACTOR, to * HORIZONTAL_TRANSFORMATION_FACTOR };
 //		return null;
 	}
 	
@@ -42,7 +50,8 @@ public class SceneTransformer {
 		int [] scenePoints = new int [xpoints.length];
 		
 		for (int i = 0 ; i < xpoints.length; i ++){
-			scenePoints[i] = xpoints[i] * TRANSFORMATION_FACTOR;
+			int xCoordinate = xpoints[i];
+			scenePoints[i] = xCoordinate * TRANSFORMATION_FACTOR;
 		}
 		return scenePoints;
 	}

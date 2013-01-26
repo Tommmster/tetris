@@ -11,6 +11,7 @@ import javax.swing.Timer;
 
 import com.viridian.tddworkshop.gameengine.TetrisEngine;
 import com.viridian.tddworkshop.tetris.command.TetrisKeyboardListener;
+import com.viridian.tddworkshop.tetris.view.Screen;
 import com.viridian.tddworkshop.tetris.view.TetrisGridPanel;
 
 public class Tetris extends JFrame{
@@ -23,12 +24,12 @@ public class Tetris extends JFrame{
 	/**
 	 * Create the empty scenario and display it.
 	 */
-	public void start() {
+	public void start(Screen screen) {
 		
 		final TetrisEngine gameEngine = new TetrisEngine();
 		JFrame frame = new JFrame ("TDD Tetris");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setPreferredSize(new Dimension(1280, 1000));
+		frame.setPreferredSize(new Dimension(screen.getGameWidth(), screen.getGameHeight()));
 		
 		
 		JLayeredPane pane = new JLayeredPane();
@@ -43,30 +44,32 @@ public class Tetris extends JFrame{
 		frame.pack();
 		frame.setVisible(true);
 		
-		ActionListener repaintAction = new ActionListener () {
-			public void actionPerformed(ActionEvent e) {
-				theGrid.repaint();
-			}
-		};
+		Timer repaintTimer = new Timer(100,repaintLoop());
+		Timer idleTimer = new Timer(200,idleLoop(gameEngine));
 		
+		repaintTimer.start();
+		idleTimer.start();
+	}
+
+	private ActionListener idleLoop(final TetrisEngine gameEngine) {
 		ActionListener idleAction= new ActionListener () {
 			public void actionPerformed(ActionEvent e) {
 				gameEngine.onIdle();
 			}
 		};
-		
-		Timer repaintTimer = new Timer(100,repaintAction);
-		Timer idleTimer = new Timer(200,idleAction);
-		
-		
-		repaintTimer.start();
-		idleTimer.start();
+		return idleAction;
+	}
+
+	private ActionListener repaintLoop() {
+		ActionListener repaintAction = new ActionListener () {
+			public void actionPerformed(ActionEvent e) {
+				theGrid.repaint();
+			}
+		};
+		return repaintAction;
 	}
 	
 	public void stop(){
-			
-		
-		
 		System.exit(0);
 	}
 }
