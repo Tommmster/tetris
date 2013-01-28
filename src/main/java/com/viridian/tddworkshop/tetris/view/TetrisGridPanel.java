@@ -68,7 +68,7 @@ public class TetrisGridPanel extends JPanel {
 		
 		drawElement(g, red, gameEngine.getCurrentElement(), Color.BLACK);
 		
-		for (SquareBlock landedElement : gameEngine.getGrid().getLandedElements()){
+		for (TetrisBlock landedElement : gameEngine.getGrid().getLandedElements()){
 			drawElement(g,black, landedElement, Color.BLACK);
 		}
 	}

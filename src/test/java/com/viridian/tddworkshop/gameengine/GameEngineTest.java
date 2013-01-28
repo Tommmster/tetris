@@ -4,8 +4,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.viridian.tddworkshop.SquareBlock;
 import com.viridian.tddworkshop.Position;
+import com.viridian.tddworkshop.SquareBlock;
 import com.viridian.tddworkshop.TetrisGrid;
 import com.viridian.tddworkshop.geometry.HeightProfile;
 import com.viridian.tddworkshop.geometry.Segment;
@@ -31,28 +31,29 @@ public class GameEngineTest {
 	@Test
 	public void whenReceivingAMoveCommandTheElementShouldMove(){
 	
-		Position[] oldPosition = engine.getCurrentElement().getCorners();
+		SquareBlock b  = (SquareBlock)engine.getCurrentElement();
+		Position[] oldPosition = b.getCorners();
 		
 		engine.executeCommand(TetrisEngine.MOVELEFT_COMMAND);
 		
-		TestUtils.assertElementHasMovedLeftAndDown(oldPosition,engine.getCurrentElement());
+		TestUtils.assertElementHasMovedLeftAndDown(oldPosition,b);
 		
-		oldPosition = engine.getCurrentElement().getCorners();
+		oldPosition = b.getCorners();
 		
 		engine.executeCommand(TetrisEngine.MOVERIGHT_COMMAND);
 		
-		TestUtils.assertElementHasMovedRightAndDown(oldPosition,engine.getCurrentElement());
+		TestUtils.assertElementHasMovedRightAndDown(oldPosition,b);
 		
-		oldPosition = engine.getCurrentElement().getCorners();
+		oldPosition = b.getCorners();
 		engine.executeCommand(TetrisEngine.BOOST_DOWN);
 		
-		TestUtils.assertElementHasMovedStraightDown(oldPosition, engine.getCurrentElement());
+		TestUtils.assertElementHasMovedStraightDown(oldPosition, b);
 	}
 	
 	@Test
 	public void elementShouldStopAtTheBottomOfTheGrid(){
 		
-		SquareBlock landingElement = engine.getCurrentElement();
+		SquareBlock landingElement = (SquareBlock)engine.getCurrentElement();
 		
 		this.landElement(landingElement);
 		
@@ -62,11 +63,11 @@ public class GameEngineTest {
 	@Test
 	public void whenAnElementLandsANewOneShouldAppear(){
 		
-		SquareBlock landingElement = engine.getCurrentElement();
+		SquareBlock landingElement = (SquareBlock)engine.getCurrentElement();
 		
 		landElement(landingElement);
 		
-		SquareBlock movingElement = engine.getCurrentElement();
+		SquareBlock movingElement =(SquareBlock) engine.getCurrentElement();
 		
 		Assert.assertNotEquals(landingElement, movingElement);
 		Assert.assertFalse(movingElement.hasLanded());
@@ -75,7 +76,7 @@ public class GameEngineTest {
 	@Test
 	public void whenAnObjectLandsOnTheGridThenTheBottomShouldBeRaised(){
 		
-		SquareBlock landingElement = engine.getCurrentElement();
+		SquareBlock landingElement =(SquareBlock) engine.getCurrentElement();
 		final int initialBottom = engine.getGrid().bottom();
 		Iterable<Segment> landingAt = landingElement.getHorizontalProjection().getShapeSegments();
 		
@@ -92,17 +93,17 @@ public class GameEngineTest {
 	public void elementsShouldBeAbleToLandOnTopOfEachOther(){
 		int expectedGridHeight = 0;
 				
-		SquareBlock landingElement = engine.getCurrentElement();
+		SquareBlock landingElement = (SquareBlock)engine.getCurrentElement();
 		landElement(landingElement);
 		
-		SquareBlock newElement = engine.getCurrentElement();
+		SquareBlock newElement = (SquareBlock)engine.getCurrentElement();
 		landElement(newElement);
 		expectedGridHeight = newElement.getTopRightCorner().getY();
 		
 
 		Assert.assertEquals(newElement.getHorizontalProjection().getShapeSegments(), landingElement.getHorizontalProjection().getShapeSegments());
 		
-		TetrisGrid grid = this.engine.getGrid();
+		TetrisGrid grid = (TetrisGrid)this.engine.getGrid();
 		
 		for (Segment segment: newElement.getHorizontalProjection().getShapeSegments()){
 			
@@ -116,12 +117,12 @@ public class GameEngineTest {
 	
 	@Test
 	public void elementsShouldNotFallOnTopOfEachOtherIfTheyAreInDifferentX(){
-		SquareBlock leftSideElement = this.engine.getCurrentElement();
+		SquareBlock leftSideElement = (SquareBlock)this.engine.getCurrentElement();
 		
 		do{}while(leftSideElement.move("left"));
 		landElement(leftSideElement);
 		
-		SquareBlock centerElement = this.engine.getCurrentElement();
+		SquareBlock centerElement = (SquareBlock)this.engine.getCurrentElement();
 		landElement(centerElement);
 		
 		

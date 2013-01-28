@@ -23,6 +23,8 @@ public class TetrisEngine implements GameEngine, StoppageListener {
 	 */
 	private TetrisBlock currentElement;
 
+	private ElementFactory elementFactory;
+
 	public TetrisEngine(){
 		this.grid = new TetrisGrid(10, 20);
 		this.insertNewMovingElement();
@@ -49,7 +51,9 @@ public class TetrisEngine implements GameEngine, StoppageListener {
 	}
 
 	private void insertNewMovingElement() {
-		TetrisBlock newone = new ElementFactory().createSquare(this.grid);
+		elementFactory = new ElementFactory();
+		TetrisBlock newone = elementFactory.createSquare(this.grid);
+		
 		newone.start();
 		newone.registerListener(this);
 		this.setCurrentElement(newone);
